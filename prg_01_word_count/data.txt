@@ -1,0 +1,2 @@
+Hello this is test data for word count program in pyspark
+PySpark is used to process large amount of data in distributed environment
