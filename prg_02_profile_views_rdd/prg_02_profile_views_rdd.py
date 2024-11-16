@@ -15,12 +15,15 @@ spark = SparkSession. \
     enableHiveSupport(). \
     getOrCreate()
 
-base_rdd = spark.sparkContext.textFile('/home/sbaluni/Personal/work/pyspark/prg_02_profile_views/data.txt')
-rdd2 = base_rdd.map(lambda x : x.title().split(",")[2])
-rdd3 = rdd2.map(lambda x : (x,1))
-rdd4 = rdd3.reduceByKey(lambda x,y : x+y)
+base_rdd = spark.sparkContext.textFile('/home/sbaluni/Personal/work/pyspark/prg_02_profile_views_rdd/data.txt')
 
-#print(rdd4.collect())
-rdd4.saveAsTextFile('/home/sbaluni/Personal/work/pyspark/prg_02_profile_views/output')
+# Map based on whose profile was viewed.
+map_user_rdd = base_rdd.map(lambda x : (x.title().split(",")[2], 1))
+
+# Aggregate results for each user
+red_users_rdd = map_user_rdd.reduceByKey(lambda x,y : x+y)
+
+#print(red_users_rdd.collect())
+red_users_rdd.saveAsTextFile('/home/sbaluni/Personal/work/pyspark/prg_02_profile_views_rdd/output')
 
 
